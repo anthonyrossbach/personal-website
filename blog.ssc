@@ -1,0 +1,58 @@
+s.include("/include_before.ssc")
+
+v.content=s.file_read("/page_content/page1.html")
+t.content(v.content)
+
+t.content('<section class="panel color2-alt">')
+t.content('<div class="intro color2">')
+t.content("<h2 class=\"major\">Blog</h2>")
+t.content("<p>I post all about tech things. I don't post often but when I do it will be great.</p>")
+
+if set uv.page
+  t.content('<a href="/blog" class="button primary color2" style="margin-bottom:10px;">Back to all posts</a>')
+end
+
+t.content('<a href="/" class="button primary color2">My full site</a>')
+
+t.content("</div>")
+
+t.content('<div class="inner columns aligned">')
+t.content('<div class="span-4-75">')
+
+if notset uv.page
+  t.content('<h3 class="major">New posts</h3>')
+	v.array=s.folder_content("/page_content/blog")
+	v.content_processed=s.array_loop("render_filetree",v.array)
+
+	t.content(v.content_processed)
+else
+	v.file="/page_content/blog/uv.page"
+
+	if s.file_exists(v.file) true
+    v.title=s.file_name(v.file,".md")
+		v.title=s.string_word_uppercase(v.title)
+
+    t.title("v.title -&nbsp;")
+		v.content=s.file_read(v.file)
+    v.content=s.string_replace("----spotlight-start",'</div></div></section><section class="panel spotlight medium right" id="first"><div class="image filtered" data-position="top left">',v.content)
+    v.content=s.string_replace("----spotlight-end",'</div></section><section class="panel color2-alt"><div class="inner columns aligned"><div class="span-4-75">',v.content)
+
+    v.content=s.string_replace("----",'</div></div><div class="inner columns aligned"><div class="span-4-75">',v.content)
+		v.content=s.markdown(v.content)
+
+
+		t.content(v.content)
+	else
+    t.title("No blog post found -&nbsp;")
+		t.content("<h3 class=\"major\">Not found</h3>")
+		t.content("Sorry we cant find this page.")
+	end
+
+
+end
+
+t.content('</div>')
+t.content('</div>')
+t.content('</section>')
+
+s.include("/include_after.ssc")

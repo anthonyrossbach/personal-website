@@ -1,0 +1,35 @@
+s.include("/include_before.ssc")
+
+v.content=s.file_read("/page_content/page1.html")
+t.content(v.content)
+
+v.content=s.file_read("/page_content/page2.html")
+t.content(v.content)
+
+t.content('<section class="panel spotlight left">')
+t.content('<div class="content span-3">')
+t.content('<h2 class="major">I have a blog</h2>')
+t.content('<p>I also post all about tech stuff and intresting things I like. Check it out if you are bored.</p>')
+t.content('<a href="/blog" class="button primary color2">View all blog posts</a>')
+t.content('</div>')
+t.content('<div class="inner span-3">')
+t.content('<h3 class="major">Recent posts</h3>')
+v.array=s.folder_content("/page_content/blog")
+v.content_processed=s.array_loop("render_filetree_maxmainpage",v.array)
+t.content(v.content_processed)
+t.content('</div>')
+t.content('<div class="image filtered tinted" data-position="top right">')
+t.content('<img src="https://images.unsplash.com/photo-1478774519940-123bd0ab1e0b?auto=format&fit=crop&w=1200&q=80" alt="" />')
+t.content('</div>')
+t.content('</section>')
+
+v.content=s.file_read("/page_content/page3.html")
+t.content(v.content)
+
+v.content=s.file_read("/page_content/page4.html")
+t.content(v.content)
+
+v.content=s.file_read("/page_content/page5.html")
+t.content(v.content)
+
+s.include("/include_after.ssc")

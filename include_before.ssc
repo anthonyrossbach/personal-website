@@ -1,0 +1,71 @@
+//Set template file
+s.template("/template.html")
+
+
+f.render_contentmd{
+	v.file=v.function_passed[0]
+
+	v.title=s.file_name(v.file,".md")
+	v.title=s.string_word_uppercase(v.title)
+
+	v.content=s.file_read(v.file)
+	v.content=s.markdown(v.content)
+	s.echo("<h2>v.title</h2>v.content")
+}
+
+f.render_contentmd_boxed{
+	v.file=v.function_passed[0]
+
+	v.title=s.file_name(v.file,".md")
+	v.title=s.string_word_uppercase(v.title)
+
+	v.content=s.file_read(v.file)
+	v.content=s.markdown(v.content)
+	s.echo("<div style='padding:10px;background:#f8f8f8;border-radius:5px;margin-bottom:15px;'><h2>v.title</h2>v.content</div>")
+}
+
+f.render_filetree{
+	v.file=v.function_passed[0]
+
+	v.title=s.file_name(v.file,".md")
+
+	if s.file_exists(v.file) true
+		v.link=v.file
+		v.link=s.string_replace("/page_content/blog/","",v.link)
+		v.link=s.string_url_encode(v.link)
+
+		v.content=s.markdown(v.content)
+		s.echo("<li><a href='?page=v.link'>v.title</a></li>")
+	else
+		if s.folder_exists(v.file) true
+			v.title=s.string_replace("-","\s",v.title)
+			v.title=s.string_word_uppercase(v.title)
+
+			s.echo("<div style='margin-left:10px;'><h2>v.title</h2><ul>")
+			v.array=s.folder_content(v.file)
+			v.content_processed=s.array_loop("render_filetree",v.array)
+			s.echo(v.content_processed)
+			s.echo("</ul></div>")
+		end
+	end
+}
+
+gv.rendermax=1
+f.render_filetree_maxmainpage{
+
+  if gv.rendermax<=10
+  	v.file=v.function_passed[0]
+
+  	v.title=s.file_name(v.file,".md")
+
+  	if s.file_exists(v.file) true
+  		v.link=v.file
+  		v.link=s.string_replace("/page_content/blog/","",v.link)
+  		v.link=s.string_url_encode(v.link)
+
+  		v.content=s.markdown(v.content)
+  		s.echo("<li><a href='/blog?page=v.link'>v.title</a></li>")
+  	end
+    gv.rendermax+1
+  end
+}
